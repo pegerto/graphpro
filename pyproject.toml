@@ -1,6 +1,6 @@
 [project]
 name = "graphpro"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Pegerto Fernandez", email="pegerto@gmail.com" },
 ]
@@ -27,7 +27,7 @@ packages = ["src/graphpro"]
 
 [tool.pytest.ini_options]
 pythonpath = [
-  ".", "src"
+  "src"
 ]
 
 [project.urls]
