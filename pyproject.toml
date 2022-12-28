@@ -1,0 +1,35 @@
+[project]
+name = "graphpro"
+version = "0.0.1"
+authors = [
+  { name="Pegerto Fernandez", email="pegerto@gmail.com" },
+]
+description = "A python module to handle graph protein data"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/graphpro"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "src"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/pegerto/graphpro"
+"Bug Tracker" = "https://github.com/pegerto/graphpro"
