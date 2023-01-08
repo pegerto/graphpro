@@ -1,4 +1,4 @@
-from .util.residues import RES_NAME
+from .util.residues import one_letter_res
 class AtomGroup():
     def n_atoms(self) -> int:
         pass
@@ -27,7 +27,7 @@ class MDAnalisysAtomGroup():
          return self._c_alphas(chain).positions
     
     def c_alphas_residues(self, chain = None):
-         return  [{"id": res.resid, "name": RES_NAME[res.resname]} for res in self._c_alphas(chain).residues]
+         return  [{"id": res.resid, "name": one_letter_res(res.resname)} for res in self._c_alphas(chain).residues]
          
     def __repr__(self):
         return f'AtomGroup {self.n_atoms()} atoms'

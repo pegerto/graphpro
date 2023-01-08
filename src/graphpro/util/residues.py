@@ -1,4 +1,4 @@
-RES_NAME = {
+_RES_NAME = {
     'GLY': 'G',
     'ALA': 'A',
     'LEU': 'L',
@@ -21,3 +21,6 @@ RES_NAME = {
     'ASP': 'D',
     'THR': 'T',   
 }
+
+def one_letter_res(res: str) -> str:
+    return _RES_NAME.get(res,'X')
