@@ -18,14 +18,11 @@ class ContactMap(RepresentationMethod):
         self.cutoff = cutoff
         self.chain = chain
     
-    def res_map(self, ag):
-        return {i: e for i, e in enumerate(ag.c_alphas_residues())}
-    
     def generate(self, ag):
         ca_position = ag.c_alphas_positions(self.chain)
         dist = distance.squareform(distance.pdist(ca_position))
         dist[dist > self.cutoff] = 0
-        return Graph(nx.from_numpy_matrix(dist), ca_position, self.res_map(ag))
+        return Graph(nx.from_numpy_matrix(dist), ca_position, ag.c_alphas_residues())
 
 
 class ProGraphGenerator:

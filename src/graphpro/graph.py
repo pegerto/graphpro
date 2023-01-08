@@ -1,14 +1,19 @@
 import networkx as nx 
 import numpy as np
 
+from .util.residues import one_letter_res
+
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
     """
-    def __init__(self, graph: nx.Graph , positions: np.array, res_map: dict[int, int]):
+    def __init__(self, graph: nx.Graph , positions: np.array, res_map: dict[int, dict]):
         self.graph = graph
         self.positions = positions
-        self.res_map = res_map
-    
+        self._n_attr = {i: {"resid": res_attr['resid'], "resname": one_letter_res(res_attr['resname'])} for i, res_attr in enumerate(res_map)}
+
+
+    def node_attr(self, node_id: int):
+        return self._n_attr.get(node_id)
     
     def communities(self) -> list[tuple[float, list[set]]]:
         """ Perform Girvan Newman communinity detection returning the list of communities.
