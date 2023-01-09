@@ -10,10 +10,20 @@ class Graph():
         self.graph = graph
         self.positions = positions
         self._n_attr = {i: {"resid": res_attr['resid'], "resname": one_letter_res(res_attr['resname'])} for i, res_attr in enumerate(res_map)}
-
+        self._resid_to_node = {res_attr['resid']: i for i, res_attr in enumerate(res_map)} 
 
     def node_attr(self, node_id: int):
         return self._n_attr.get(node_id)
+    
+    def node_attr_add(self, node_id: int, attribute_name: str, attribute: any):
+        """Adds a specific attribute to a noode in the graph"""
+        attrs = self.node_attr(node_id)
+        if attrs:
+            attrs[attribute_name] = attribute
+                    
+    def get_node_by_resid(self, resid: int) -> int:
+        """Returns the node number using the residue id, None if the residue id is not known"""
+        return self._resid_to_node.get(resid)
     
     def communities(self) -> list[tuple[float, list[set]]]:
         """ Perform Girvan Newman communinity detection returning the list of communities.

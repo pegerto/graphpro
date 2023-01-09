@@ -1,8 +1,5 @@
 import networkx as nx 
-import numpy as np
-
 from scipy.spatial import distance
-from .model import AtomGroup
 from .graph import Graph
 
 class RepresentationMethod():
