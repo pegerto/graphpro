@@ -6,8 +6,8 @@ from .util.residues import one_letter_res
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
     """
-    def __init__(self, graph: nx.Graph , positions: np.array, res_map: dict[int, dict]):
-        self.graph = graph
+    def __init__(self, distances: np.array , positions: np.array, res_map: dict[int, dict]):
+        self.distances = distances
         self.positions = positions
         self._n_attr = {i: {"resid": res_attr['resid'], "resname": one_letter_res(res_attr['resname'])} for i, res_attr in enumerate(res_map)}
         self._resid_to_node = {res_attr['resid']: i for i, res_attr in enumerate(res_map)} 
@@ -35,6 +35,11 @@ class Graph():
         c_iter = community.girvan_newman(self.graph)
         return  [(community.modularity(self.graph, com), com) for com in c_iter]
 
+    def graph(self) -> nx.Graph:
+        """ Returns a networkx G undirected graph with populated attributes """
+        G = nx.from_numpy_matrix(self.distances)
+        nx.set_node_attributes(G,self._n_attr)
+        return G
     
     def plot(self, 
         figsize: tuple[int,int] = (8,10),

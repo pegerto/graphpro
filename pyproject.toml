@@ -1,6 +1,6 @@
 [project]
 name = "graphpro"
-version = "0.0.5"
+version = "0.1.0"
 authors = [
   { name="Pegerto Fernandez", email="pegerto@gmail.com" },
 ]
