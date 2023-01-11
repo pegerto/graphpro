@@ -32,8 +32,8 @@ class Graph():
         """
         from networkx.algorithms import community
 
-        c_iter = community.girvan_newman(self.graph)
-        return  [(community.modularity(self.graph, com), com) for com in c_iter]
+        c_iter = community.girvan_newman(self.graph())
+        return  [(community.modularity(self.graph(), com), com) for com in c_iter]
 
     def graph(self) -> nx.Graph:
         """ Returns a networkx G undirected graph with populated attributes """
@@ -50,8 +50,8 @@ class Graph():
         import matplotlib.pyplot as plt
         from mpl_toolkits.mplot3d import Axes3D
 
-        node_xyz = np.array([self.positions[v] for v in sorted(self.graph)])
-        edge_xyz = np.array([(self.positions[u], self.positions[v]) for u, v in self.graph.edges()])
+        node_xyz = np.array([self.positions[v] for v in sorted(self.graph())])
+        edge_xyz = np.array([(self.positions[u], self.positions[v]) for u, v in self.graph().edges()])
 
         node_colors = None
         if len(communities) > 0: 
