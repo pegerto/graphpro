@@ -15,7 +15,7 @@ class ContactMap(RepresentationMethod):
         self.cutoff = cutoff
         self.chain = chain
     
-    def generate(self, ag, name=""):
+    def generate(self, ag, name: str):
         ca_position = ag.c_alphas_positions(self.chain)
         dist = distance.squareform(distance.pdist(ca_position))
         dist[dist > self.cutoff] = 0
@@ -23,9 +23,10 @@ class ContactMap(RepresentationMethod):
 
 
 class ProGraphGenerator:
-    def __init__(self, ag):
+    def __init__(self, ag, name=''):
         self.ag = ag
+        self.name = name
 
     def generate(self, rep):
-        G = rep.generate(self.ag)
+        G = rep.generate(self.ag, self.name)
         return G
