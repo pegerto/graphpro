@@ -6,7 +6,12 @@ from .util.residues import one_letter_res
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
     """
-    def __init__(self, distances: np.array , positions: np.array, res_map: dict[int, dict]):
+    def __init__(self, name: str, 
+                 distances: np.array, 
+                 positions: np.array, 
+                 res_map: dict[int, dict]):
+
+        self.name = name
         self.distances = distances
         self.positions = positions
         self._n_attr = {i: {"resid": res_attr['resid'], "resname": one_letter_res(res_attr['resname'])} for i, res_attr in enumerate(res_map)}
@@ -75,3 +80,6 @@ class Graph():
         _format_axes(ax)
         fig.tight_layout()
         plt.show()
+    
+    def __repr__(self) -> str:
+        return self.name

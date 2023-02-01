@@ -6,7 +6,7 @@ class RepresentationMethod():
     def res_map(self, ag):
         pass
         
-    def generate(ag):
+    def generate(self, ag, name: str):
         pass
 
 
@@ -15,11 +15,11 @@ class ContactMap(RepresentationMethod):
         self.cutoff = cutoff
         self.chain = chain
     
-    def generate(self, ag):
+    def generate(self, ag, name=""):
         ca_position = ag.c_alphas_positions(self.chain)
         dist = distance.squareform(distance.pdist(ca_position))
         dist[dist > self.cutoff] = 0
-        return Graph(dist, ca_position, ag.c_alphas_residues(self.chain))
+        return Graph(name, dist, ca_position, ag.c_alphas_residues(self.chain))
 
 
 class ProGraphGenerator:
