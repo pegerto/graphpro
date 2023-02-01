@@ -26,8 +26,12 @@ class MDAnalisysAtomGroup():
         
         # select only residues with large occupancy
         atoms_filtered = [ag[ag.occupancies.tolist().index(max(ag.occupancies))] for ag in atoms.groupby('resnums').values()] 
-        
-        return reduce(lambda a,b: a+b, atoms_filtered)
+        if len(atoms_filtered) == 0:
+            return atoms
+        elif len(atoms_filtered) == 1:
+            return atoms_filtered[1]
+        else:
+            return reduce(lambda a,b: a+b, atoms_filtered)
 
     def c_alphas_positions(self, chain = None):
          return self._c_alphas(chain).positions
