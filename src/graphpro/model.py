@@ -1,3 +1,5 @@
+from functools import reduce
+
 class AtomGroup():
     def n_atoms(self) -> int:
         pass
@@ -20,7 +22,12 @@ class MDAnalisysAtomGroup():
         chain_sel = ''
         if chain != None:
             chain_sel = f'chainid {chain} and '
-        return self.u.select_atoms(chain_sel + 'name CA')
+        atoms = self.u.select_atoms(chain_sel + 'name CA')
+        
+        # select only residues with large occupancy
+        atoms_filtered = [ag[ag.occupancies.tolist().index(max(ag.occupancies))] for ag in atoms.groupby('resnums').values()] 
+        
+        return reduce(lambda a,b: a+b, atoms_filtered)
 
     def c_alphas_positions(self, chain = None):
          return self._c_alphas(chain).positions
