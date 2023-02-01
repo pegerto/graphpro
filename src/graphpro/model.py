@@ -29,7 +29,7 @@ class MDAnalisysAtomGroup():
         if len(atoms_filtered) == 0:
             return atoms
         elif len(atoms_filtered) == 1:
-            return atoms_filtered[0]
+            return atoms
         else:
             return reduce(lambda a,b: a+b, atoms_filtered)
 
