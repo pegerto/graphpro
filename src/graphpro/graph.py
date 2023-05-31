@@ -42,7 +42,7 @@ class Graph():
 
     def graph(self) -> nx.Graph:
         """ Returns a networkx G undirected graph with populated attributes """
-        G = nx.from_numpy_matrix(self.distances)
+        G = nx.from_numpy_array(self.distances)
         nx.set_node_attributes(G,self._n_attr)
         return G
     
