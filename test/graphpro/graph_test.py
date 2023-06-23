@@ -1,7 +1,9 @@
+import os
+
 import MDAnalysis as mda
 import numpy as np
 import networkx as nx
-import os
+
 
 from graphpro import md_analisys
 from graphpro.graph import Graph
