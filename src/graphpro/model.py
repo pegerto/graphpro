@@ -23,12 +23,12 @@ class MDAnalisysAtomGroup():
         if chain != None:
             chain_sel = f'chainid {chain} and '
         atoms = self.u.select_atoms(chain_sel + 'name CA')
-        
+       
         # select only residues with large occupancy
         atoms_filtered = [ag[ag.occupancies.tolist().index(max(ag.occupancies))] for ag in atoms.groupby('resnums').values()] 
         if len(atoms_filtered) == 0:
             return atoms
-        elif len(atoms_filtered) == 1:
+        if len(atoms_filtered) == 1:
             return atoms
         else:
             return reduce(lambda a,b: a+b, atoms_filtered)

@@ -14,7 +14,7 @@ class ContactMap(RepresentationMethod):
     def __init__(self, cutoff, chain=None):
         self.cutoff = cutoff
         self.chain = chain
-    
+   
     def generate(self, ag, name: str):
         ca_position = ag.c_alphas_positions(self.chain)
         dist = distance.squareform(distance.pdist(ca_position))
