@@ -24,13 +24,13 @@ class Graph():
 
     def node_attr(self, node_id: int):
         return self._n_attr.get(node_id)
-    
+
     def node_attr_add(self, node_id: int, attribute_name: str, attribute: any):
         """Adds a specific attribute to a noode in the graph"""
         attrs = self.node_attr(node_id)
         if attrs:
             attrs[attribute_name] = attribute
-                    
+                
     def get_node_by_resid(self, resid: int) -> int:
         """Returns the node number using the residue id, None if the residue id is not known"""
         return self._resid_to_node.get(resid)
@@ -50,7 +50,7 @@ class Graph():
         G = nx.from_numpy_array(self.distances)
         nx.set_node_attributes(G,self._n_attr)
         return G
-    
+
     def plot(self, 
         figsize: tuple[int,int] = (8,10),
         communities: list[set[int]] = []
@@ -85,6 +85,6 @@ class Graph():
         _format_axes(ax)
         fig.tight_layout()
         plt.show()
-    
+
     def __repr__(self) -> str:
         return self.name
