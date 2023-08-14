@@ -1,8 +1,6 @@
 import networkx as nx 
 import numpy as np
 
-from .util.residues import one_letter_res
-
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
     """
@@ -14,7 +12,7 @@ class Graph():
         self.name = name
         self.distances = distances
         self.positions = positions
-        self._n_attr = {i: {"resid": res_attr['resid'], "resname": one_letter_res(res_attr['resname'])} for i, res_attr in enumerate(res_map)}
+        self._n_attr = {i: {"resid": res_attr['resid']} for i, res_attr in enumerate(res_map)}
         self._resid_to_node = {res_attr['resid']: i for i, res_attr in enumerate(res_map)} 
 
     def __eq__(self, other):

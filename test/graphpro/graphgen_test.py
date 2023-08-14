@@ -17,4 +17,3 @@ def test_graph_generation_from_mdanalysis_custom_residue():
     hetnam = mda.Universe(os.path.dirname(os.path.realpath(__file__)) + '/../testdata/hetnam.pdb')
     G = md_analisys(hetnam).generate(ContactMap(cutoff=6))
     assert(len(G.graph().nodes) == 5752)
-    assert(G.node_attr(5751)['resname'] == 'X')

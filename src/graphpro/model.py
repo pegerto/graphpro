@@ -9,7 +9,7 @@ class AtomGroup():
 
     def c_alphas_residues(self, chain: None):
         pass
-    
+   
 
 class MDAnalisysAtomGroup():
     def __init__(self, u):
