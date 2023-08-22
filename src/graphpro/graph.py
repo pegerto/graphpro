@@ -18,6 +18,8 @@ class Graph():
     def __eq__(self, other):
         """Compare two graphs for equality"""
         #TODO: may need to compare more than the distances
+        if not other:
+            return False
         return (self.distances == other.distances).any()
 
     def node_attr(self, node_id: int):

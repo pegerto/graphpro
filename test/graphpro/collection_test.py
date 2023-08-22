@@ -29,3 +29,8 @@ def test_load_and_save():
 def test_compare_collections():
     col = GraphCollection([SIMPLE_G])
     assert col == col
+
+def test_graphs_are_iterable():
+    col = GraphCollection([SIMPLE_G, SIMPLE_G])
+    for graph in col:
+        assert graph != None

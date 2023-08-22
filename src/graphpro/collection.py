@@ -22,13 +22,30 @@ class GraphCollection():
 
     def __eq__(self, other):
         return self._graphs == other._graphs
+    
+    def __next__(self):
+        for graph in self._graphs:
+            yield graph
+    
+    def __iter__(self):
+        for graph in self._graphs:
+            yield graph        
 
     def save(self, filename: str):
+        """Serialise the collection into a file name, allowing a pipeline to be 
+        compose 
+        
+        Args
+            filename: location of the file to be stored.
+        """
         with open(filename, "wb") as outfile:
             pickle.dump(self, outfile)
 
     @staticmethod
     def load(filename: str):
+        """ Loads a collection from a stored file, restoring the collection 
+            of graph to process 
+        """
         with open(filename, 'rb') as input:
             col = pickle.load(input)
             return col
