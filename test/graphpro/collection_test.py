@@ -20,7 +20,6 @@ def test_graph_collection():
 def test_load_and_save():
     col = GraphCollection([SIMPLE_G])
     f = tempfile.NamedTemporaryFile()
-    print(f.name)
     col.save(f.name)
     col_res = GraphCollection.load(f.name)
 
