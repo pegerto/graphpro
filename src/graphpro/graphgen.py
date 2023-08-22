@@ -1,11 +1,12 @@
-import networkx as nx 
+import networkx as nx
 from scipy.spatial import distance
 from .graph import Graph
 
+
 class RepresentationMethod():
-    def res_map(self, ag, chain = None):
+    def res_map(self, ag, chain=None):
         pass
-        
+
     def generate(self, ag, name: str):
         pass
 
@@ -14,7 +15,7 @@ class ContactMap(RepresentationMethod):
     def __init__(self, cutoff, chain=None):
         self.cutoff = cutoff
         self.chain = chain
-   
+
     def generate(self, ag, name: str):
         ca_position = ag.c_alphas_positions(self.chain)
         dist = distance.squareform(distance.pdist(ca_position))
@@ -27,7 +28,7 @@ class ProGraphGenerator:
         self.ag = ag
         self.name = name
 
-    def generate(self, rep, node_annotations = []):
+    def generate(self, rep, node_annotations=[]):
         G = rep.generate(self.ag, self.name)
         for node_annotation in node_annotations:
             node_annotation.generate(G, self.ag)

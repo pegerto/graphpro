@@ -19,8 +19,9 @@ _RES_NAME = {
     'ARG': 'R',
     'ASN': 'N',
     'ASP': 'D',
-    'THR': 'T',   
+    'THR': 'T',
 }
 
+
 def one_letter_res(res: str) -> str:
-    return _RES_NAME.get(res,'X')
+    return _RES_NAME.get(res, 'X')

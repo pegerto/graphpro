@@ -1,23 +1,28 @@
-import networkx as nx 
+import networkx as nx
 import numpy as np
+
 
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
     """
-    def __init__(self, name: str, 
-                 distances: np.array, 
-                 positions: np.array, 
+
+    def __init__(self, name: str,
+                 distances: np.array,
+                 positions: np.array,
                  res_map: dict[int, dict]):
 
         self.name = name
         self.distances = distances
         self.positions = positions
-        self._n_attr = {i: {"resid": res_attr['resid']} for i, res_attr in enumerate(res_map)}
-        self._resid_to_node = {res_attr['resid']: i for i, res_attr in enumerate(res_map)} 
+        self._n_attr = {i: {"resid": res_attr['resid']}
+                        for i, res_attr in enumerate(res_map)}
+        self._resid_to_node = {
+            res_attr['resid']: i for i,
+            res_attr in enumerate(res_map)}
 
     def __eq__(self, other):
         """Compare two graphs for equality"""
-        #TODO: may need to compare more than the distances
+        # TODO: may need to compare more than the distances
         if not other:
             return False
         return (self.distances == other.distances).any()
@@ -30,11 +35,11 @@ class Graph():
         attrs = self.node_attr(node_id)
         if attrs:
             attrs[attribute_name] = attribute
-                
+
     def get_node_by_resid(self, resid: int) -> int:
         """Returns the node number using the residue id, None if the residue id is not known"""
         return self._resid_to_node.get(resid)
-    
+
     def communities(self) -> list[tuple[float, list[set]]]:
         """ Perform Girvan Newman communinity detection returning the list of communities.
             The algorithm is perform all the way until no more edges are left to be removed.
@@ -43,30 +48,31 @@ class Graph():
         from networkx.algorithms import community
 
         c_iter = community.girvan_newman(self.graph())
-        return  [(community.modularity(self.graph(), com), com) for com in c_iter]
+        return [(community.modularity(self.graph(), com), com)
+                for com in c_iter]
 
     def graph(self) -> nx.Graph:
         """ Returns a networkx G undirected graph with populated attributes """
         G = nx.from_numpy_array(self.distances)
-        nx.set_node_attributes(G,self._n_attr)
+        nx.set_node_attributes(G, self._n_attr)
         return G
 
-    def plot(self, 
-        figsize: tuple[int,int] = (8,10),
-        communities: list[set[int]] = []
-        ) -> None: 
+    def plot(self,
+             figsize: tuple[int, int] = (8, 10),
+             communities: list[set[int]] = []
+             ) -> None:
         """ Plot the graph represention in 3D using real 3D possitions.
         """
         import matplotlib.pyplot as plt
-        from mpl_toolkits.mplot3d import Axes3D
 
         node_xyz = np.array([self.positions[v] for v in sorted(self.graph())])
-        edge_xyz = np.array([(self.positions[u], self.positions[v]) for u, v in self.graph().edges()])
+        edge_xyz = np.array([(self.positions[u], self.positions[v])
+                            for u, v in self.graph().edges()])
 
         node_colors = None
-        if len(communities) > 0: 
-            community_node = [(n,i) for i,c in enumerate(communities) for n in c]
-            community_node.sort()
+        if len(communities) > 0:
+            community_node = sorted(
+                [(n, i) for i, c in enumerate(communities) for n in c])
             node_colors = [n[1] for n in community_node]
 
         fig = plt.figure(figsize=figsize)
