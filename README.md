@@ -19,5 +19,5 @@ Using pip:
 # How to cite 
 
 ```
-    Fernandez. P, Dantu, S.C, Pandini. A. "GraphPro: a python framework for protein deep geometrical learning". 2023
+Fernandez. P, Dantu, S.C, Pandini. A. "GraphPro: a python framework for protein deep geometrical learning". 2023
 ```
