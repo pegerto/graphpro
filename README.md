@@ -1,4 +1,5 @@
 # GraphPro
+[![Documentation Status](https://readthedocs.org/projects/graphpro/badge/?version=latest)](https://graphpro.readthedocs.io/en/latest/?badge=latest)
 
 GraphPro is a versatile and pluggable OO python library designed for leveraging deep graph learning representations to gain insights into structural proteins and their conformations. With its wide range of functionalities, we provide a comprehensive framework for researchers and practitioners to explore and analyze complex protein structures.
 
