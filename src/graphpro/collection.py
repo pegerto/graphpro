@@ -28,8 +28,10 @@ class GraphCollection():
             yield graph
 
     def __iter__(self):
-        for graph in self._graphs:
-            yield graph
+        return self.__next__()
+
+    def __repr__(self):
+        return f'GraphCollection size {len(self)}'
 
     def save(self, filename: str):
         """Serialise the collection into a file name, allowing a pipeline to be

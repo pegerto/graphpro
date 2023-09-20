@@ -1,6 +1,11 @@
 from functools import reduce
 
 
+
+class Trajectory():
+    def __init__():
+        pass
+
 class AtomGroup():
     def n_atoms(self) -> int:
         pass
@@ -12,18 +17,18 @@ class AtomGroup():
         pass
 
 
-class MDAnalisysAtomGroup():
-    def __init__(self, u):
-        self.u = u
+class MDAnalisysAtomGroup(AtomGroup):
+    def __init__(self, atom_goup):
+        self.atoms = atom_goup
 
     def n_atoms(self):
-        return self.u.atoms.n_atoms
+        return self.n_atoms
 
     def _c_alphas(self, chain=None):
         chain_sel = ''
         if chain is not None:
             chain_sel = f'chainid {chain} and '
-        atoms = self.u.select_atoms(chain_sel + 'name CA')
+        atoms = self.atoms.select_atoms(chain_sel + 'name CA')
 
         # select only residues with large occupancy
         atoms_filtered = [ag[ag.occupancies.tolist().index(
@@ -44,3 +49,13 @@ class MDAnalisysAtomGroup():
 
     def __repr__(self):
         return f'AtomGroup {self.n_atoms()} atoms'
+
+
+class MDAnalisysTrajectory(Trajectory):
+    def __init__(self, trajectory):
+        self.trajectory = trajectory
+
+
+    def __iter__(self):
+        for ag in self.trajectory:
+            yield MDAnalisysAtomGroup(ag)

@@ -4,6 +4,7 @@ import MDAnalysis as mda
 
 from graphpro import md_analisys
 from graphpro.graphgen import ContactMap
+from graphpro.collection import GraphCollection
 
 from MDAnalysis.tests.datafiles import PDB
 
@@ -22,3 +23,10 @@ def test_graph_generation_from_mdanalysis_custom_residue():
         '/../testdata/hetnam.pdb')
     G = md_analisys(hetnam).generate(ContactMap(cutoff=6))
     assert(len(G.graph().nodes) == 5752)
+
+
+def test_graph_generation_collection():
+    graph_col = md_analisys(u1).generate_trajectory(ContactMap(cutoff=6))
+    
+    assert type(graph_col) == GraphCollection
+    assert len(graph_col) > 0
