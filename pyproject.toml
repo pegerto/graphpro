@@ -1,6 +1,6 @@
 [project]
 name = "graphpro"
-version = "0.6.0"
+version = "0.6.1"
 authors = [
   { name="Pegerto Fernandez", email="pegerto@gmail.com" },
 ]
@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 
     "Topic :: Scientific/Engineering",
