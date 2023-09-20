@@ -6,9 +6,9 @@ from graphpro import md_analisys
 from graphpro.graphgen import ContactMap
 from graphpro.collection import GraphCollection
 
-from MDAnalysis.tests.datafiles import PDB
+from MDAnalysis.tests.datafiles import PDB, XTC
 
-u1 = mda.Universe(PDB)
+u1 = mda.Universe(PDB, XTC)
 
 
 def test_graph_generation_from_mdanalysis():
@@ -29,4 +29,4 @@ def test_graph_generation_collection():
     graph_col = md_analisys(u1).generate_trajectory(ContactMap(cutoff=6))
     
     assert type(graph_col) == GraphCollection
-    assert len(graph_col) > 0
+    assert len(graph_col) == 10 # XTC has 10 frames
