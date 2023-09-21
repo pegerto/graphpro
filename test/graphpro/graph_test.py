@@ -36,3 +36,10 @@ def test_graph_allow_retrieve_nodes_by_resid():
 
 def test_graph_str_informed():
     assert(str(SIMPLE_G) == "test")
+
+def test_graph_plot():
+    SIMPLE_G.plot(show=False)
+
+def test_graph_to_geom_data():
+    assert(SIMPLE_G.to_geom_data().coo() == [])
+    

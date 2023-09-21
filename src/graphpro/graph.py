@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 
+from torch_geometric.data import Data
 
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
@@ -57,21 +58,27 @@ class Graph():
         nx.set_node_attributes(G, self._n_attr)
         return G
 
+    def to_geom_data(self) -> Data:
+        """ Return a PyG object from this existing graph"""
+        cco = [(1,2)]
+        return Data(edge_index= cco_graph_format)
+
     def nodes(self) -> list[int]:
-        """ Return node collection """
+        """ Return node list """
         return self._resid_to_node.values()
-        
+    
     def plot(self,
              figsize: tuple[int, int] = (8, 10),
-             communities: list[set[int]] = []
+             communities: list[set[int]] = [],
+             show = True
              ) -> None:
-        """ Plot the graph represention in 3D using real 3D possitions.
+        """ Plot the graph represention in 3D using residue positions.
         """
         import matplotlib.pyplot as plt
 
-        node_xyz = np.array([self.positions[v] for v in sorted(self.graph())])
+        node_xyz = np.array([self.positions[v] for v in sorted(self.to_networkx())])
         edge_xyz = np.array([(self.positions[u], self.positions[v])
-                            for u, v in self.graph().edges()])
+                            for u, v in self.to_networkx().edges()])
 
         node_colors = None
         if len(communities) > 0:
@@ -94,7 +101,8 @@ class Graph():
 
         _format_axes(ax)
         fig.tight_layout()
-        plt.show()
+        if show:
+            plt.show()
 
     def __repr__(self) -> str:
         return self.name
