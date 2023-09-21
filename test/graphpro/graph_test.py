@@ -22,7 +22,7 @@ HETNAM_G = md_analisys(HETNAM).generate(ContactMap(cutoff=6), [ResidueType()])
 
 
 def test_graph():
-    assert (len(SIMPLE_G.graph().nodes) == 2)
+    assert (len(SIMPLE_G.nodes()) == 2)
 
 
 def test_graph_allow_add_node_attributes():

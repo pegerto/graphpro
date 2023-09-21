@@ -13,7 +13,7 @@ u1 = mda.Universe(PDB, XTC)
 
 def test_graph_generation_from_mdanalysis():
     G = md_analisys(u1).generate(ContactMap(cutoff=6))
-    assert(len(G.graph().nodes) == 214)
+    assert(len(G.nodes()) == 214)
 
 
 def test_graph_generation_from_mdanalysis_custom_residue():
@@ -22,7 +22,7 @@ def test_graph_generation_from_mdanalysis_custom_residue():
             os.path.realpath(__file__)) +
         '/../testdata/hetnam.pdb')
     G = md_analisys(hetnam).generate(ContactMap(cutoff=6))
-    assert(len(G.graph().nodes) == 5752)
+    assert(len(G.nodes()) == 5752)
 
 
 def test_graph_generation_collection():
