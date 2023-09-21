@@ -48,8 +48,8 @@ class Graph():
         """
         from networkx.algorithms import community
 
-        c_iter = community.girvan_newman(self.graph())
-        return [(community.modularity(self.graph(), com), com)
+        c_iter = community.girvan_newman(self.to_networkx())
+        return [(community.modularity(self.to_networkx(), com), com)
                 for com in c_iter]
 
     def to_networkx(self) -> nx.Graph:
