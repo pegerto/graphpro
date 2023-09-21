@@ -51,12 +51,16 @@ class Graph():
         return [(community.modularity(self.graph(), com), com)
                 for com in c_iter]
 
-    def graph(self) -> nx.Graph:
+    def to_networkx(self) -> nx.Graph:
         """ Returns a networkx G undirected graph with populated attributes """
         G = nx.from_numpy_array(self.distances)
         nx.set_node_attributes(G, self._n_attr)
         return G
 
+    def nodes(self) -> list[int]:
+        """ Return node collection """
+        return self._resid_to_node.values()
+        
     def plot(self,
              figsize: tuple[int, int] = (8, 10),
              communities: list[set[int]] = []
