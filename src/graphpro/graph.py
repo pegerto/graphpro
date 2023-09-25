@@ -59,7 +59,7 @@ class Graph():
         nx.set_node_attributes(G, self._n_attr)
         return G
 
-    def to_geom_data(self) -> Data:
+    def to_data(self) -> Data:
         """ Return a PyG object from this existing graph"""
         directed = torch.tensor([[edge[0],edge[1]] for edge in self.to_networkx().edges])
         inversed = torch.tensor([[edge[1],edge[0]] for edge in self.to_networkx().edges])

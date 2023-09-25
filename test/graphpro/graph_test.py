@@ -42,9 +42,9 @@ def test_graph_str_informed():
 def test_graph_plot():
     SIMPLE_G.plot(show=False)
 
-def test_graph_to_geom_data():
+def test_to_data_index():
     edge_index = torch.tensor([[0, 0, 1, 0, 1, 1],
                   [0, 1, 1, 0, 0, 1]])
     
-    assert(torch.allclose(SIMPLE_G.to_geom_data().edge_index,  edge_index))
+    assert(torch.allclose(SIMPLE_G.to_data().edge_index,  edge_index))
     
