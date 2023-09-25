@@ -3,7 +3,9 @@ import os
 import MDAnalysis as mda
 import numpy as np
 import networkx as nx
+import torch 
 
+from torch_geometric.data import Data
 
 from graphpro import md_analisys
 from graphpro.graph import Graph
@@ -36,3 +38,13 @@ def test_graph_allow_retrieve_nodes_by_resid():
 
 def test_graph_str_informed():
     assert(str(SIMPLE_G) == "test")
+
+def test_graph_plot():
+    SIMPLE_G.plot(show=False)
+
+def test_to_data_index():
+    edge_index = torch.tensor([[0, 0, 1, 0, 1, 1],
+                  [0, 1, 1, 0, 0, 1]])
+    
+    assert(torch.allclose(SIMPLE_G.to_data().edge_index,  edge_index))
+    
