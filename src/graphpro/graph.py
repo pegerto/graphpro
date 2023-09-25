@@ -1,5 +1,6 @@
 import networkx as nx
 import numpy as np
+import torch
 
 from torch_geometric.data import Data
 
@@ -60,8 +61,11 @@ class Graph():
 
     def to_geom_data(self) -> Data:
         """ Return a PyG object from this existing graph"""
-        cco = [(1,2)]
-        return Data(edge_index= cco_graph_format)
+        directed = torch.tensor([[edge[0],edge[1]] for edge in self.to_networkx().edges])
+        inversed = torch.tensor([[edge[1],edge[0]] for edge in self.to_networkx().edges])
+        cco = torch.cat((directed, inversed), 0).t().contiguous()
+
+        return Data(edge_index= cco)
 
     def nodes(self) -> list[int]:
         """ Return node list """
