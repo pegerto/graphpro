@@ -6,5 +6,5 @@ GraphPro is a versatile and pluggable OO python library designed for leveraging 
 
 .. toctree::
    :maxdepth: 2
-
-install
+   
+   install
