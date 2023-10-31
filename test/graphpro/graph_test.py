@@ -44,7 +44,7 @@ def test_graph_plot():
 
 def test_to_data_index():
     edge_index = torch.tensor([[0, 0, 1, 0, 1, 1],
-                  [0, 1, 1, 0, 0, 1]])
+                  [0, 1, 1, 0, 0, 1]], dtype=torch.int32)
     
     assert(torch.allclose(SIMPLE_G.to_data().edge_index,  edge_index))
     

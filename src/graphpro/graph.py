@@ -61,8 +61,8 @@ class Graph():
 
     def to_data(self) -> Data:
         """ Return a PyG object from this existing graph"""
-        directed = torch.tensor([[edge[0],edge[1]] for edge in self.to_networkx().edges])
-        inversed = torch.tensor([[edge[1],edge[0]] for edge in self.to_networkx().edges])
+        directed = torch.tensor([[edge[0],edge[1]] for edge in self.to_networkx().edges], dtype=torch.int32)
+        inversed = torch.tensor([[edge[1],edge[0]] for edge in self.to_networkx().edges], dtype=torch.int32)
         cco = torch.cat((directed, inversed), 0).t().contiguous()
 
         return Data(edge_index= cco)
