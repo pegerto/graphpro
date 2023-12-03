@@ -11,11 +11,17 @@ from graphpro import md_analisys
 from graphpro.graph import Graph
 from graphpro.graphgen import ContactMap
 from graphpro.annotations import ResidueType
+from graphpro.util.residues import _RES_NAME
 
 DISTANCES = np.array([[4, 2], [2, 4]])
 POSITIONS_3D = np.array([[1, 2, 3], [-1, -2, -3]])
-RESIDUES = [{"resid": 1, "resname": "GLY"}, {"resid": 2, "resname": "ALA"},]
+RESIDUES = [{"resid": 1}, {"resid": 2},]
 SIMPLE_G = Graph("test", DISTANCES, POSITIONS_3D, RESIDUES)
+
+SIMPLE_G_ATTR = Graph("test_attr", DISTANCES, POSITIONS_3D, RESIDUES)
+SIMPLE_G_ATTR.node_attr_add(0, "resname", "G")
+SIMPLE_G_ATTR.node_attr_add(1, "resname", "A")
+
 HETNAM = mda.Universe(
     os.path.dirname(
         os.path.realpath(__file__)) +
@@ -47,4 +53,6 @@ def test_to_data_index():
                   [0, 1, 1, 0, 0, 1]], dtype=torch.long)
     
     assert(torch.allclose(SIMPLE_G.to_data().edge_index,  edge_index))
-    
+
+def test_to_data_x_transformer():    
+    assert SIMPLE_G_ATTR.to_data(node_encoders=[ResidueType()]).x.size() == (2,21)

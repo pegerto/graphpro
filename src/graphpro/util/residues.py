@@ -25,3 +25,6 @@ _RES_NAME = {
 
 def one_letter_res(res: str) -> str:
     return _RES_NAME.get(res, 'X')
+
+def res_letters() -> list[str]:
+    return list(_RES_NAME.values())

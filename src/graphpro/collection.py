@@ -45,10 +45,10 @@ class GraphCollection():
         with open(filename, "wb") as outfile:
             pickle.dump(self, outfile)
 
-    def to_dataset(self, root: str) -> InMemoryDataset:
+    def to_dataset(self, root: str,  node_encoders = []) -> InMemoryDataset:
         """ Return the collection as InMemoryDataset
         """
-        return GraphProDataset(root, self)
+        return GraphProDataset(root, self, node_encoders)
 
     @staticmethod
     def load(filename: str):
@@ -64,9 +64,10 @@ class GraphProDataset(InMemoryDataset):
         self,
         root: str,
         collection: GraphCollection,
+        node_encoders = [],
         transform: Optional[Callable] = None,
         pre_transform: Optional[Callable] = None,
         pre_filter: Optional[Callable] = None,
     ):
         super().__init__(root, transform, pre_transform, pre_filter)
-        self.data, self.slices = self.collate([g.to_data() for g in collection])
+        self.data, self.slices = self.collate([g.to_data(node_encoders) for g in collection])
