@@ -20,10 +20,12 @@ _RES_NAME = {
     'ASN': 'N',
     'ASP': 'D',
     'THR': 'T',
+    '': 'X',
 }
 
 
 def one_letter_res(res: str) -> str:
+    # TODO: Add warning here, include a guesser in the annotation
     return _RES_NAME.get(res, 'X')
 
 def res_letters() -> list[str]:
