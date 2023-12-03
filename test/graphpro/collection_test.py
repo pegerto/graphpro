@@ -2,6 +2,7 @@
 
 import numpy as np
 import tempfile
+import torch
 
 from graphpro.graph import Graph
 from graphpro.collection import GraphCollection
@@ -35,3 +36,9 @@ def test_graphs_are_iterable():
     col = GraphCollection([SIMPLE_G, SIMPLE_G])
     for graph in col:
         assert graph is not None
+
+
+def test_graphs_dataset():
+    col = GraphCollection([SIMPLE_G, SIMPLE_G])
+    ds = col.to_dataset('.')
+    assert torch.all(ds[0].edge_index.eq(SIMPLE_G.to_data().edge_index))

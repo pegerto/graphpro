@@ -2,8 +2,10 @@
 """
 import pickle
 
-from .graph import Graph
+from torch_geometric.data import InMemoryDataset
+from typing import Callable, Optional
 
+from .graph import Graph
 
 class GraphCollection():
     """This ultility provides a way to organise and distribute multiple graphpro graphs
@@ -43,6 +45,11 @@ class GraphCollection():
         with open(filename, "wb") as outfile:
             pickle.dump(self, outfile)
 
+    def to_dataset(self, root: str) -> InMemoryDataset:
+        """ Return the collection as InMemoryDataset
+        """
+        return GraphProDataset(root, self)
+
     @staticmethod
     def load(filename: str):
         """ Loads a collection from a stored file, restoring the collection
@@ -51,3 +58,15 @@ class GraphCollection():
         with open(filename, 'rb') as input:
             col = pickle.load(input)
             return col
+
+class GraphProDataset(InMemoryDataset):
+    def __init__(
+        self,
+        root: str,
+        collection: GraphCollection,
+        transform: Optional[Callable] = None,
+        pre_transform: Optional[Callable] = None,
+        pre_filter: Optional[Callable] = None,
+    ):
+        super().__init__(root, transform, pre_transform, pre_filter)
+        self.data, self.slices = self.collate([g.to_data() for g in collection])
