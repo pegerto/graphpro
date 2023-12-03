@@ -55,4 +55,4 @@ def test_to_data_index():
     assert(torch.allclose(SIMPLE_G.to_data().edge_index,  edge_index))
 
 def test_to_data_x_transformer():    
-    assert SIMPLE_G_ATTR.to_data(node_encoders=[ResidueType()]).x.size() == (2,21)
+    assert SIMPLE_G_ATTR.to_data(node_encoders=[ResidueType()]).x.size() == (2,22)

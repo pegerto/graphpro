@@ -19,4 +19,4 @@ def test_resname_encoded():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType()])
     data = G.to_data(node_encoders=  [ResidueType()])
 
-    assert data.x.size() == (214, 21)
+    assert data.x.size() == (214, 22)
