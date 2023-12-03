@@ -14,3 +14,9 @@ def test_resname_annotation():
 
     assert len(G.nodes()) == 214
     assert G.node_attr(0)['resname'] == 'M'
+
+def test_resname_encoded():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType()])
+    data = G.to_data(node_encoders=  [ResidueType()])
+
+    assert data.x.size() == (214, 21)
