@@ -21,4 +21,4 @@ def test_resname_encoded():
     data = G.to_data(node_encoders=  [ResidueType()])
 
     assert data.x.size() == (214, 22)
-    assert data.x.dtype == torch.int64
+    assert data.x.dtype == torch.float

@@ -14,6 +14,11 @@ class NodeAnnotation():
         pass
 
     def encode(self) -> torch.tensor:
+        """ Encode the node property to a tensor
+
+            :returns a tensor the first dimension as number of nodes in the graph, 
+            and dtype float (to be able to cat to other node properties.)
+        """
         pass
 
 
@@ -38,4 +43,4 @@ class ResidueType(NodeAnnotation):
     def encode(self, G: Graph) -> torch.tensor:
         res_names = [G.node_attr(n)['resname'] for n in G.nodes()]
         res_ids = [self.res_letters.index(name) for name in res_names]
-        return F.one_hot(torch.tensor(res_ids, dtype=torch.int64), num_classes=len(self.res_letters))
+        return F.one_hot(torch.tensor(res_ids, dtype=torch.int64), num_classes=len(self.res_letters)).to(torch.float)
