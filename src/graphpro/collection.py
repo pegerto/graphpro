@@ -6,6 +6,7 @@ from torch_geometric.data import InMemoryDataset
 from typing import Callable, Optional
 
 from .graph import Graph
+from .model import Target
 
 class GraphCollection():
     """This ultility provides a way to organise and distribute multiple graphpro graphs
@@ -45,10 +46,10 @@ class GraphCollection():
         with open(filename, "wb") as outfile:
             pickle.dump(self, outfile)
 
-    def to_dataset(self, root: str,  node_encoders = []) -> InMemoryDataset:
+    def to_dataset(self, root: str,  node_encoders = [], target: Target = None) -> InMemoryDataset:
         """ Return the collection as InMemoryDataset
         """
-        return GraphProDataset(root, self, node_encoders)
+        return GraphProDataset(root, self, node_encoders, target)
 
     @staticmethod
     def load(filename: str):

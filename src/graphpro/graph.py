@@ -3,6 +3,7 @@ import numpy as np
 import torch
 
 from torch_geometric.data import Data
+from .model import Target
 
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
@@ -59,22 +60,26 @@ class Graph():
         nx.set_node_attributes(G, self._n_attr)
         return G
 
-    def to_data(self, node_encoders = []) -> Data:
+    def to_data(self, node_encoders = [], target: Target = None) -> Data:
         """ Return a PyG object from this existing graph"""
         directed = torch.tensor([[edge[0],edge[1]] for edge in self.to_networkx().edges], dtype=torch.long)
         inversed = torch.tensor([[edge[1],edge[0]] for edge in self.to_networkx().edges], dtype=torch.long)
         cco = torch.cat((directed, inversed), 0).t().contiguous()
-        
-        # Node properties
+    
         x = None
+        y = None
+
+        # Concat a list of node features into a X tensor
         for encoder in node_encoders:
             ecoded_attr = encoder.encode(self)
             if x:
                 x = torch.concat((x, encoder), 1) # concat to 1 dim
             else:
                 x = ecoded_attr
+        if target:
+            y = target.encode(self)
 
-        return Data(x=x, edge_index=cco)
+        return Data(x=x, edge_index=cco, y=y)
 
     def nodes(self) -> list[int]:
         """ Return node list """

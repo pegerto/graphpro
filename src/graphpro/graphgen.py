@@ -36,7 +36,7 @@ class ProGraphGenerator:
             node_annotation.generate(G, self.ag)
         return G
     
-    def generate(self, rep, node_annotations=[]):
+    def generate(self, rep, node_annotations=[]) -> Graph:
         return self._generate(self.ag, rep, node_annotations)
     
     def generate_trajectory(self, rep, node_annotations=[]):

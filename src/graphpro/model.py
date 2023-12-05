@@ -1,6 +1,20 @@
+import torch
+
 from functools import reduce
 
+class Target():
+    def __init__(self):
+        pass
 
+    def encode(G) -> torch.FloatTensor:
+        pass
+
+class NodeTarget(Target):
+    def __init__(self, attr_name: str):
+        self.attr_name = attr_name
+    
+    def encode(G) -> torch.FloatTensor:
+        pass
 
 class Trajectory():
     def __init__():
