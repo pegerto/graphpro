@@ -66,9 +66,10 @@ class GraphProDataset(InMemoryDataset):
         root: str,
         collection: GraphCollection,
         node_encoders = [],
+        target: Target = None,
         transform: Optional[Callable] = None,
         pre_transform: Optional[Callable] = None,
         pre_filter: Optional[Callable] = None,
     ):
         super().__init__(root, transform, pre_transform, pre_filter)
-        self.data, self.slices = self.collate([g.to_data(node_encoders) for g in collection])
+        self.data, self.slices = self.collate([g.to_data(node_encoders, target) for g in collection])
