@@ -2,8 +2,16 @@ import torch
 import torch.nn.functional as F
 
 from graphpro.graph import Graph
-from graphpro.model import AtomGroup
+from graphpro.model import AtomGroup, NodeTarget
 from graphpro.util.residues import one_letter_res, res_letters
+
+class NodeTargetBinaryAttribute(NodeTarget):
+    """ Binary target, creates a binary one_hot encoding of the property
+        been present on the node or not.
+    """
+    def encode(self, G: Graph) -> torch.Tensor:
+        present = [self.attr_name in G.node_attr(n) for n in G.nodes()]
+        return F.one_hot(torch.tensor(present, dtype=torch.int64), num_classes=2).to(torch.float)
 
 
 class NodeAnnotation():
