@@ -38,7 +38,14 @@ def test_graphs_are_iterable():
         assert graph is not None
 
 
+def test_graph_collection_split():
+    collection = GraphCollection([SIMPLE_G] * 100)
+    train, test = collection.split(seed=42)    
+    assert len(train) == 80
+    assert len(test) == 20
+
 def test_graphs_dataset():
     col = GraphCollection([SIMPLE_G, SIMPLE_G])
     ds = col.to_dataset('.')
     assert torch.all(ds[0].edge_index.eq(SIMPLE_G.to_data().edge_index))
+    

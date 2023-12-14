@@ -1,9 +1,10 @@
 """ This collection module allow a set of utilities to manage a collection of graphs.
 """
 import pickle
+import random
 
-from torch_geometric.data import InMemoryDataset
 from typing import Callable, Optional
+from torch_geometric.data import InMemoryDataset
 
 from .graph import Graph
 from .model import Target
@@ -50,6 +51,25 @@ class GraphCollection():
         """ Return the collection as InMemoryDataset
         """
         return GraphProDataset(root, self, node_encoders, target)
+
+
+    def split(self,
+              test_size: float = 0.8,
+              seed: int = None):
+        """ Split the graph collection into trainning and validation sets.
+        """
+        random.seed(seed)
+        #avoid use random.choice rather decide the splits base on size
+        test = []
+        val = []
+        for graph in self._graphs:
+            if random.random() < test_size:
+                test.append(graph)
+            else:
+                val.append(graph)
+   
+        return GraphCollection(test), GraphCollection(val)
+   
 
     @staticmethod
     def load(filename: str):
