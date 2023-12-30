@@ -36,3 +36,16 @@ def test_resname_encoded():
 def test_sasa_annotation():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [SASAResArea(chain_id='')])
     assert G.node_attr(0)['sasa_area'] != 0
+
+def test_sasa_encoding():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [SASAResArea(chain_id='')])
+    data = G.to_data(node_encoders=[ SASAResArea(chain_id='')])
+    
+    assert data.x.size() == (214,1)
+
+
+def test_encode_multiple_attributes():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType(), SASAResArea(chain_id='')])
+    data = G.to_data(node_encoders=[ResidueType(), SASAResArea(chain_id='')])
+    
+    assert data.x.size() == (214,23)

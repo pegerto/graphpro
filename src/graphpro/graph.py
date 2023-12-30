@@ -72,8 +72,8 @@ class Graph():
         # Concat a list of node features into a X tensor
         for encoder in node_encoders:
             ecoded_attr = encoder.encode(self)
-            if x:
-                x = torch.concat((x, encoder), 1) # concat to 1 dim
+            if isinstance(x,torch.Tensor):
+                x = torch.concat((x, ecoded_attr), 1) # concat to 1 dim
             else:
                 x = ecoded_attr
         if target:
