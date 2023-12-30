@@ -69,8 +69,7 @@ class SASAResArea(NodeAnnotation):
     def generate(self, G: Graph, atom_group: AtomGroup):
         sasa = compute_sasa(atom_group)
         chain_res = sasa.residueAreas()[self.chain_id]
-        
-        print(G._resid_to_node)
+
         for k in chain_res:
             node_id = G.get_node_by_resid(int(k))
             G.node_attr_add(node_id, self.attr_name, chain_res[k].total)
