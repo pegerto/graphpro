@@ -6,18 +6,18 @@ class Target():
     def __init__(self):
         pass
 
-    def encode(G) -> torch.FloatTensor:
+    def encode(self, G) -> torch.FloatTensor:
         pass
 
 class NodeTarget(Target):
     def __init__(self, attr_name: str):
         self.attr_name = attr_name
     
-    def encode(G) -> torch.FloatTensor:
+    def encode(self, G) -> torch.FloatTensor:
         pass
 
 class Trajectory():
-    def __init__():
+    def __init__(self):
         pass
 
 class AtomGroup():

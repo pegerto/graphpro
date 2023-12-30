@@ -3,11 +3,11 @@ import MDAnalysis as mda
 
 from graphpro import md_analisys
 from graphpro.graphgen import ContactMap
-from graphpro.annotations import ResidueType, NodeTargetBinaryAttribute
+from graphpro.annotations import ResidueType, NodeTargetBinaryAttribute, SASAResArea
 
-from MDAnalysis.tests.datafiles import PDB
+from MDAnalysis.tests.datafiles import PDB_small
 
-u1 = mda.Universe(PDB)
+u1 = mda.Universe(PDB_small)
 
 def test_node_target_binary():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType()])
@@ -28,7 +28,11 @@ def test_resname_annotation():
 
 def test_resname_encoded():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType()])
-    data = G.to_data(node_encoders=  [ResidueType()])
+    data = G.to_data(node_encoders=[ResidueType()])
 
     assert data.x.size() == (214, 22)
     assert data.x.dtype == torch.float
+
+def test_sasa_annotation():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [SASAResArea(chain_id='')])
+    assert G.node_attr(0)['sasa_area'] != 0
