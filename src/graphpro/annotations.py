@@ -72,8 +72,6 @@ class SASAResArea(NodeAnnotation):
         
         print(G._resid_to_node)
         for k in chain_res:
-            print(k)
             node_id = G.get_node_by_resid(int(k))
-            print(node_id)
             G.node_attr_add(node_id, self.attr_name, chain_res[k].total)
     

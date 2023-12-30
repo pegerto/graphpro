@@ -32,8 +32,9 @@ class ProGraphGenerator:
 
     def _generate(self, ag, rep, node_annotations=[]):
         G = rep.generate(self.ag, self.name)
-        for node_annotation in node_annotations:
-            node_annotation.generate(G, self.ag)
+        if len(G.nodes()) > 0:
+            for node_annotation in node_annotations:
+                node_annotation.generate(G, self.ag)
         return G
     
     def generate(self, rep, node_annotations=[]) -> Graph:
