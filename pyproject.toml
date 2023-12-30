@@ -1,6 +1,5 @@
 [project]
 name = "graphpro"
-version = "0.11.0"
 authors = [
   { name="Pegerto Fernandez", email="pegerto@gmail.com" },
 ]
@@ -17,14 +16,17 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence"
 ]
 
-dynamic = ["dependencies"]
+dynamic = ["dependencies", "version"]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/graphpro"]
+
+[tool.hatch.version]
+source = "vcs"
 
 [tool.pytest.ini_options]
 pythonpath = [
