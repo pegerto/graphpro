@@ -50,7 +50,7 @@ class ResidueType(NodeAnnotation):
             G.node_attr_add(node_id, self.attr_name, one_letter_res(res['resname']))
     
     def encode(self, G: Graph) -> torch.tensor:
-        res_names = [G.node_attr(n)['resname'] for n in G.nodes()]
+        res_names = [G.node_attr(n)[self.attr_name] for n in G.nodes()]
         res_ids = [self.res_letters.index(name) for name in res_names]
         return F.one_hot(torch.tensor(res_ids, dtype=torch.int64), num_classes=len(self.res_letters)).to(torch.float)
 
@@ -74,3 +74,6 @@ class SASAResArea(NodeAnnotation):
             node_id = G.get_node_by_resid(int(k))
             G.node_attr_add(node_id, self.attr_name, chain_res[k].total)
     
+    def encode(self, G: Graph) -> torch.tensor:
+        total_area = [G.node_attr(n)[self.attr_name] for n in G.nodes()]
+        return torch.tensor(total_area, dtype=torch.float)
