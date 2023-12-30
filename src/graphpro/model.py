@@ -44,12 +44,10 @@ class MDAnalisysAtomGroup(AtomGroup):
             chain_sel = f'chainid {chain} and '
         atoms = self.atoms.select_atoms(chain_sel + 'name CA')
 
-        # select only residues with large occupancy
+        # select only atoms with large occupancy
         atoms_filtered = [ag[ag.occupancies.tolist().index(
             max(ag.occupancies))] for ag in atoms.groupby('resnums').values()]
-        if len(atoms_filtered) == 0:
-            return atoms
-        if len(atoms_filtered) == 1:
+        if len(atoms_filtered) < 2:
             return atoms
         else:
             return reduce(lambda a, b: a + b, atoms_filtered)
@@ -58,8 +56,8 @@ class MDAnalisysAtomGroup(AtomGroup):
         return self._c_alphas(chain).positions
 
     def c_alphas_residues(self, chain=None):
-        return [{"resid": res.resid, "resname": res.resname}
-                for res in self._c_alphas(chain).residues]
+        return [{"resid": a.resid, "resname": a.resname}
+                for a in self._c_alphas(chain)]
 
     def __repr__(self):
         return f'AtomGroup {self.n_atoms()} atoms'
