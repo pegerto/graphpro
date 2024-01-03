@@ -75,5 +75,5 @@ class SASAResArea(NodeAnnotation):
             G.node_attr_add(node_id, self.attr_name, chain_res[k].total)
     
     def encode(self, G: Graph) -> torch.tensor:
-        total_area = [G.node_attr(n)[self.attr_name] for n in G.nodes()]
+        total_area = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
         return torch.tensor([total_area], dtype=torch.float).T
