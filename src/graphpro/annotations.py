@@ -76,4 +76,4 @@ class SASAResArea(NodeAnnotation):
     
     def encode(self, G: Graph) -> torch.tensor:
         total_area = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
-        return torch.tensor([total_area], dtype=torch.float).T
+        return F.normalize(torch.tensor([total_area], dtype=torch.float).T)
