@@ -15,9 +15,9 @@ def test_node_target_binary():
 
     target = NodeTargetBinaryAttribute("test_attr")
     y = target.encode(G)
-    assert y.size() == (214, 1)
-    assert torch.all(y[0].eq(torch.tensor([0.])))
-    assert torch.all(y[1].eq(torch.tensor([1.])))
+    assert y.size() == (214,2)
+    assert torch.all(y[0].eq(torch.tensor([1., 0.])))
+    assert torch.all(y[1].eq(torch.tensor([0., 1.])))
 
 
 def test_resname_annotation():

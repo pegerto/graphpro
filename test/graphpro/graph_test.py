@@ -56,4 +56,4 @@ def test_to_data_x_transformer():
 
 def test_to_data_y_target():
     data = SIMPLE_G_ATTR.to_data(node_encoders= [ResidueType()], target = NodeTargetBinaryAttribute("target"))    
-    assert data.y.size() == (2,1)
+    assert data.y.size() == (2,2)

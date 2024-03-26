@@ -12,7 +12,7 @@ class NodeTargetBinaryAttribute(NodeTarget):
     """
     def encode(self, G: Graph) -> torch.Tensor:
         present = [self.attr_name in G.node_attr(n) for n in G.nodes()]
-        return torch.tensor([present], dtype=torch.int64).to(torch.float).T
+        return F.one_hot(torch.tensor(present, dtype=torch.int64), num_classes=2).to(torch.float)
 
 
 class NodeAnnotation():
