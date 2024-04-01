@@ -1,4 +1,3 @@
-
 from graphpro.model import AtomGroup
 
 def compute_sasa(ag: AtomGroup):

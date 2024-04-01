@@ -1,3 +1,5 @@
+import math
+
 import torch
 import torch.nn.functional as F
 
@@ -72,7 +74,9 @@ class SASAResArea(NodeAnnotation):
 
         for k in chain_res:
             node_id = G.get_node_by_resid(int(k))
-            G.node_attr_add(node_id, self.attr_name, chain_res[k].total)
+            # Protect agains nan in sasa computation
+            total_area = 0 if math.isnan(chain_res[k].total) else chain_res[k].total
+            G.node_attr_add(node_id, self.attr_name, total_area)
     
     def encode(self, G: Graph) -> torch.tensor:
         total_area = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
