@@ -8,3 +8,7 @@ GraphPro is a versatile and pluggable OO python library designed for leveraging 
    :maxdepth: 2
    
    install
+   get-started
+
+
+   api.rst
