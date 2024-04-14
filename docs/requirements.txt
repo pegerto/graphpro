@@ -1,1 +1,5 @@
 furo
+
+# Module dependencies
+torch_geometric>=2.0
+torch >= 2.0
