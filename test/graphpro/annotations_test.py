@@ -43,7 +43,6 @@ def test_sasa_encoding():
     
     assert data.x.size() == (214,1)
 
-
 def test_encode_multiple_attributes():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType(), SASAResArea(chain_id='')])
     data = G.to_data(node_encoders=[ResidueType(), SASAResArea(chain_id='')])
