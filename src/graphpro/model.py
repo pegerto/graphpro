@@ -1,4 +1,6 @@
 import torch
+import prody as pdy
+import MDAnalysis as mda
 
 from functools import reduce
 
@@ -30,13 +32,65 @@ class AtomGroup():
     def c_alphas_residues(self, chain: None):
         pass
 
+    def positions(self):
+        pass
+
+    def names(self):
+        """ Return atoms names
+        """
+        pass
+
+    def resnames(self):
+        """ Returns resnames
+        """
+        pass
+
+    def resnums(self):
+        """ Returns resnumbers
+        """
+        pass
+
+    def chain_ids(self):
+        """ Returns the chainId for each individual atom
+        """
+        pass
+
+    def to_prody(self) -> pdy.AtomGroup:
+        ag = pdy.AtomGroup('name')
+        ag.setCoords(self.positions())
+        ag.setNames(self.names())
+        ag.setResnames(self.resnames())
+        ag.setResnums(self.resnums())
+        ag.setChids(self.chain_ids())
+        return ag
+
 
 class MDAnalisysAtomGroup(AtomGroup):
-    def __init__(self, atom_goup):
-        self.atoms = atom_goup
+    def __init__(self, atom_group):
+        if isinstance(atom_group, mda.Universe):
+            self.atoms = atom_group.atoms
+        else:
+            self.atoms = atom_group
 
     def n_atoms(self):
         return self.n_atoms
+
+
+    def positions(self):
+        return self.atoms.positions
+
+
+    def names(self):
+        return self.atoms.names
+
+    def resnames(self):
+        return self.atoms.resnames
+
+    def resnums(self):
+        return self.atoms.resnums
+    
+    def chain_ids(self):
+        return [a.chainID for a in self.atoms]
 
     def _c_alphas(self, chain=None):
         chain_sel = ''
