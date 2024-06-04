@@ -4,6 +4,7 @@
     a: apolar
     nc: negative charged
     pc: positive charged
+    unk: unknown
 """
 POLARITY = {
     'CYS': 'p', 
@@ -26,8 +27,10 @@ POLARITY = {
     'ASP': 'nc', 
     'LYS': 'nc', 
     'ARG': 'pc',
-    'HSD': 'pc'}
+    'HSD': 'pc',
+    '': 'unk' }
 
 def residue_polarity(resname):
-    return POLARITY[resname]
+    return POLARITY.get(resname, 'unk')
+
 POLARITY_CLASSES = list(set(POLARITY.values()))

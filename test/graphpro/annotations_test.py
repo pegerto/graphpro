@@ -54,7 +54,7 @@ def test_polarity_encoding():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [Polarity()])
     data = G.to_data(node_encoders=[Polarity()])
     
-    assert data.x.size() == (214, 4)
+    assert data.x.size() == (214, 5)
     
 def test_encode_multiple_attributes():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType(), SASAResArea(chain_id='')])
