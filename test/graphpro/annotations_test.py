@@ -3,7 +3,7 @@ import MDAnalysis as mda
 
 from graphpro import md_analisys
 from graphpro.graphgen import ContactMap
-from graphpro.annotations import ResidueType, NodeTargetBinaryAttribute, SASAResArea
+from graphpro.annotations import ResidueType, NodeTargetBinaryAttribute, SASAResArea, Polarity
 
 from MDAnalysis.tests.datafiles import PDB_small
 
@@ -43,8 +43,21 @@ def test_sasa_encoding():
     
     assert data.x.size() == (214,1)
 
+def test_polarity_generation():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [Polarity(), ResidueType()])
+    assert G.node_attr(0)['resname'] == 'M'
+    assert G.node_attr(0)['polarity'] == 'a'
+    assert G.node_attr(30)['resname'] == 'T'
+    assert G.node_attr(30)['polarity'] == 'p'
+
+def test_polarity_encoding():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [Polarity()])
+    data = G.to_data(node_encoders=[Polarity()])
+    
+    assert data.x.size() == (214, 4)
+    
 def test_encode_multiple_attributes():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [ResidueType(), SASAResArea(chain_id='')])
     data = G.to_data(node_encoders=[ResidueType(), SASAResArea(chain_id='')])
-    
+
     assert data.x.size() == (214,23)

@@ -8,6 +8,7 @@ from graphpro.model import AtomGroup, NodeTarget
 from graphpro.util.residues import one_letter_res, res_letters
 from graphpro.util.sasa import compute_sasa
 from graphpro.util.modes import compute_gnm_slow_modes
+from graphpro.util.polarity import POLARITY_CLASSES, residue_polarity
 
 class NodeTargetBinaryAttribute(NodeTarget):
     """ Binary target, creates a binary one_hot encoding of the property
@@ -108,4 +109,23 @@ class GNMSlowModes(NodeAnnotation):
             [G.node_attr(n)[f"{self.attr_name}_{m}"] for m in range(0, self.modes)] for n in G.nodes()
         ]
         return torch.tensor(values ,dtype=torch.float)
-    
+
+class Polarity(NodeAnnotation):
+    """ Anotates and encode per residue polarity
+    """
+    def __init__(self, attr_name: str = 'polarity'):
+        """ Inits the residue generation
+            Args:
+                attr_name: name of the attribute prefix
+        """
+        self.attr_name  = attr_name
+
+    def generate(self, G: Graph, atom_group: AtomGroup):
+        for res in atom_group.c_alphas_residues():
+            node_id = G.get_node_by_resid(res['resid'])
+            G.node_attr_add(node_id, self.attr_name, residue_polarity(res['resname']))
+
+    def encode(self, G: Graph) -> torch.tensor:
+        polarity = [G.node_attr(n)[self.attr_name] for n in G.nodes()]
+        polarity_class = [POLARITY_CLASSES.index(p) for p in polarity]
+        return F.one_hot(torch.tensor(polarity_class, dtype=torch.int64), num_classes=len(POLARITY_CLASSES)).to(torch.float)
