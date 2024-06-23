@@ -3,6 +3,7 @@ import prody as pdy
 import MDAnalysis as mda
 
 from functools import reduce
+from dataclasses import dataclass
 
 class Target():
     def __init__(self):
@@ -17,6 +18,13 @@ class NodeTarget(Target):
     
     def encode(self, G) -> torch.FloatTensor:
         pass
+
+@dataclass
+class ProteinMetadata:
+    """ Additional information associated to the protein
+    """
+    uniprot_id: str
+    chain: str
 
 class Trajectory():
     def __init__(self):

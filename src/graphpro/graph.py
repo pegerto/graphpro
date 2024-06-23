@@ -3,7 +3,8 @@ import numpy as np
 import torch
 
 from torch_geometric.data import Data
-from .model import Target
+from dataclasses import dataclass
+from .model import Target, ProteinMetadata
 
 class Graph():
     """ Graph provides a representation of a graph and required helpers.
@@ -12,7 +13,8 @@ class Graph():
     def __init__(self, name: str,
                  distances: np.array,
                  positions: np.array,
-                 res_map: dict[int, dict]):
+                 res_map: dict[int, dict],
+                 metadata: ProteinMetadata = None):
 
         self.name = name
         self.distances = distances
@@ -22,6 +24,7 @@ class Graph():
         self._resid_to_node = {
             res_attr['resid']: i for i,
             res_attr in enumerate(res_map)}
+        self.metadata = metadata
 
     def __eq__(self, other):
         """Compare two graphs for equality"""
