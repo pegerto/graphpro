@@ -129,3 +129,21 @@ class Polarity(NodeAnnotation):
         polarity = [G.node_attr(n)[self.attr_name] for n in G.nodes()]
         polarity_class = [POLARITY_CLASSES.index(p) for p in polarity]
         return F.one_hot(torch.tensor(polarity_class, dtype=torch.int64), num_classes=len(POLARITY_CLASSES)).to(torch.float)
+    
+
+class NodeAttributeEncoder(NodeAnnotation):
+    """ Encodes a note attribute that has been added manually to 
+        the graph.
+    """
+    def __init__(self, attr_name: str):
+        """ Attribute name
+        """
+        self.attr_name  = attr_name
+    
+    def generate(self, G: Graph, atom_group: AtomGroup):
+        pass
+
+    def encode(self, G: Graph) -> torch.tensor:
+        values = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
+        return F.normalize(torch.tensor([values], dtype=torch.float).T, dim=(0,1))
+   
