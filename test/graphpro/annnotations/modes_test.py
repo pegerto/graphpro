@@ -3,7 +3,7 @@ import torch
 
 from graphpro import md_analisys
 from graphpro.graphgen import ContactMap
-from graphpro.annotations import GNMSlowModes
+from graphpro.annotations import GNMSlowModes, ANMSlowModes
 
 from MDAnalysis.tests.datafiles import PDB_small
 
@@ -28,3 +28,11 @@ def test_gnm_encoding():
 
     assert data.x.size() == (214, 3)
     assert data.x.dtype == torch.float
+
+
+def test_anm_slow_modes_annotation():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [ANMSlowModes(modes=3)])
+    assert len(G.nodes()) == 214
+    assert G.node_attr(0)['anm_slow_mode_0'] == -0.038
+    assert G.node_attr(0)['anm_slow_mode_1'] == -0.047
+    assert G.node_attr(0)['anm_slow_mode_2'] == 0.074
