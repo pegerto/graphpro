@@ -110,6 +110,32 @@ class GNMSlowModes(NodeAnnotation):
         ]
         return torch.tensor(values ,dtype=torch.float)
 
+class ANMSlowModes(NodeAnnotation):
+    """ Calculate ANM and select specific slow modes per residue
+    """
+    def __init__(self, attr_name: str = 'anm_slow_mode', modes: int = 3):
+        """ Inits the residue generation
+            Args:
+                attr_name: name of the attribute prefix
+                modes: number of modes.
+        """
+        self.attr_name  = attr_name
+        self.modes = modes
+    
+    def generate(self, G: Graph, atom_group: AtomGroup):
+        resids, modes_eigenvec = compute_gnm_slow_modes(atom_group, self.modes)
+        for i, resid  in enumerate(resids):
+             node_id = G.get_node_by_resid(int(resid))
+             for m in range(0, self.modes):
+                 G.node_attr_add(node_id, f"{self.attr_name}_{m}", modes_eigenvec[i,m].round(3))
+    
+    def encode(self, G: Graph) -> torch.tensor:
+        values = [
+            [G.node_attr(n)[f"{self.attr_name}_{m}"] for m in range(0, self.modes)] for n in G.nodes()
+        ]
+        return torch.tensor(values ,dtype=torch.float)
+
+
 class Polarity(NodeAnnotation):
     """ Anotates and encode per residue polarity
     """
