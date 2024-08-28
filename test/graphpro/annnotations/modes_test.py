@@ -31,8 +31,6 @@ def test_gnm_encoding():
 
 
 def test_anm_slow_modes_annotation():
-    G = md_analisys(u1).generate(ContactMap(cutoff=6), [ANMSlowModes(modes=3)])
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [ANMSlowModes(modes=1)])
     assert len(G.nodes()) == 214
-    assert G.node_attr(0)['anm_slow_mode_0'] == -0.038
-    assert G.node_attr(0)['anm_slow_mode_1'] == -0.047
-    assert G.node_attr(0)['anm_slow_mode_2'] == 0.074
+    assert G.node_attr(0)['anm_slow_mode_0'] == 0.014

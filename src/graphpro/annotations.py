@@ -7,7 +7,7 @@ from graphpro.graph import Graph
 from graphpro.model import AtomGroup, NodeTarget
 from graphpro.util.residues import one_letter_res, res_letters
 from graphpro.util.sasa import compute_sasa
-from graphpro.util.modes import compute_gnm_slow_modes
+from graphpro.util.modes import compute_gnm_slow_modes, compute_anm_slow_modes
 from graphpro.util.polarity import POLARITY_CLASSES, residue_polarity
 
 class NodeTargetBinaryAttribute(NodeTarget):
@@ -123,7 +123,7 @@ class ANMSlowModes(NodeAnnotation):
         self.modes = modes
     
     def generate(self, G: Graph, atom_group: AtomGroup):
-        resids, modes_eigenvec = compute_gnm_slow_modes(atom_group, self.modes)
+        resids, modes_eigenvec = compute_anm_slow_modes(atom_group, self.modes)
         for i, resid  in enumerate(resids):
              node_id = G.get_node_by_resid(int(resid))
              for m in range(0, self.modes):
