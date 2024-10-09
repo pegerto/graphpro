@@ -2,12 +2,14 @@ import math
 
 import torch
 import torch.nn.functional as F
+import numpy as np
 
 from graphpro.graph import Graph
 from graphpro.model import AtomGroup, NodeTarget
 from graphpro.util.residues import one_letter_res, res_letters
 from graphpro.util.sasa import compute_sasa
 from graphpro.util.modes import compute_gnm_slow_modes, compute_anm_slow_modes
+from graphpro.util.dssp import compute_dssp, DSSP_CLASS
 from graphpro.util.polarity import POLARITY_CLASSES, residue_polarity
 
 class NodeTargetBinaryAttribute(NodeTarget):
@@ -158,7 +160,7 @@ class Polarity(NodeAnnotation):
     
 
 class NodeAttributeEncoder(NodeAnnotation):
-    """ Encodes a note attribute that has been added manually to 
+    """ Encodes a node attribute that has been added manually to 
         the graph.
     """
     def __init__(self, attr_name: str):
@@ -173,3 +175,20 @@ class NodeAttributeEncoder(NodeAnnotation):
         values = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
         return F.normalize(torch.tensor([values], dtype=torch.float).T, dim=(0,1))
    
+class DSSP(NodeAnnotation):
+    """Encodes the specific secondary structure description per residues using DSSP"""
+    def __init__(self, attr_name: str = 'dssp'):
+        """ Attribute name
+        """
+        self.attr_name  = attr_name
+
+    def generate(self, G: Graph, atom_group: AtomGroup):
+        (resids, secondary) = compute_dssp(atom_group)
+        for resid, sec in zip(resids, secondary):
+            node_id = G.get_node_by_resid(resid)
+            G.node_attr_add(node_id,self.attr_name, sec)
+
+    def encode(self, G: Graph) -> torch.tensor:
+        secondary = [G.node_attr(n)[self.attr_name] for n in G.nodes()]
+        secondary_class = [DSSP_CLASS.index(p) for p in secondary]
+        return F.one_hot(torch.tensor(secondary_class, dtype=torch.int64), num_classes=len(DSSP_CLASS)).to(torch.float)
