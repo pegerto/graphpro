@@ -189,6 +189,6 @@ class DSSP(NodeAnnotation):
             G.node_attr_add(node_id,self.attr_name, sec)
 
     def encode(self, G: Graph) -> torch.tensor:
-        secondary = [G.node_attr(n)[self.attr_name] for n in G.nodes()]
+        secondary = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 'U' for n in G.nodes()]
         secondary_class = [DSSP_CLASS.index(p) for p in secondary]
         return F.one_hot(torch.tensor(secondary_class, dtype=torch.int64), num_classes=len(DSSP_CLASS)).to(torch.float)
