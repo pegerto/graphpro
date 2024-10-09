@@ -31,7 +31,7 @@ def compute_dssp(atom_group: AtomGroup):
             if iatom not in visited:
                 visited.append(iatom)
                 atoms.append(atom.position)
-    if atoms:
+    if atoms and len(atoms) >= 4: # not adding partial residue atoms
         coords.append(np.array(atoms))
     
     npcoords = np.array(coords)
