@@ -13,20 +13,24 @@ def compute_dssp(atom_group: AtomGroup):
     resids = []
     coords = []
     atoms = []
+    visited = []
     resid_old = None
 
     # Asumes atom order 
     for atom in atom_group.atoms:
         iatom = DSSP_ATOM_NUM.get(atom.name, None)
         if resid_old != atom.resid:
+            visited = []
             resid_old = atom.resid
             resids.append(atom.resid)
             if atoms:
                 coords.append(np.array(atoms))
-                atoms = []        
+                atoms = []     
         
         if iatom is not None:
-            atoms.append(atom.position)
+            if iatom not in visited:
+                visited.append(iatom)
+                atoms.append(atom.position)
     if atoms:
         coords.append(np.array(atoms))
     
