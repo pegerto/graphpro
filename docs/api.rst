@@ -16,6 +16,7 @@ Then a graph generator can be used:
 
     .. automodule::
         graphpro.graphgen
+        :members:
 
 
 Graph
