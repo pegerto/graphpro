@@ -3,6 +3,9 @@ from .collection import GraphCollection
 
 
 class RepresentationMethod():
+    """ This interface defines a generation strategy and can be extended to implement new strategies for transforming 
+        a collection of atoms into a graph representation.
+    """
     def res_map(self, ag, chain=None):
         pass
 
@@ -11,6 +14,8 @@ class RepresentationMethod():
 
 
 class ContactMap(RepresentationMethod):
+    """ Illustrates the spatial proximity between amino acids in a protein structure. 
+    """
     def __init__(self, cutoff, chain=None):
         self.cutoff = cutoff
         self.chain = chain
@@ -24,7 +29,11 @@ class ContactMap(RepresentationMethod):
         return Graph(name, dist, ca_position, ag.c_alphas_residues(self.chain))
 
 
-class ProGraphGenerator:
+class GraphProGenerator:
+    """ Graph Pro Generator
+        
+        Generate both a graph or a graph colection from a structure of a trajectory.
+    """
     def __init__(self, ag, trajectory = None, name=''):
         self.ag = ag
         self.trajectory = trajectory
