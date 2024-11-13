@@ -1,5 +1,5 @@
 from .model import MDAnalisysAtomGroup, MDAnalisysTrajectory
-from .graphgen import ProGraphGenerator
+from .graphgen import GraphProGenerator
 
 import MDAnalysis as mda
 
@@ -15,4 +15,4 @@ def md_analisys(u: mda.Universe, name: str = ""):
             Default: empty string
 
     """
-    return ProGraphGenerator(MDAnalisysAtomGroup(u.atoms), MDAnalisysTrajectory(u.trajectory), name)
+    return GraphProGenerator(MDAnalisysAtomGroup(u.atoms), MDAnalisysTrajectory(u.trajectory), name)
