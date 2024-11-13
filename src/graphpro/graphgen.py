@@ -1,5 +1,7 @@
+import numpy as np
 from .graph import Graph
 from .collection import GraphCollection
+
 
 
 class RepresentationMethod():
@@ -27,6 +29,28 @@ class ContactMap(RepresentationMethod):
         dist = distance.squareform(distance.pdist(ca_position))
         dist[dist > self.cutoff] = 0
         return Graph(name, dist, ca_position, ag.c_alphas_residues(self.chain))
+
+class KNN(RepresentationMethod):
+    """ Generate the structure form a defined number of neighbours
+    """
+    def __init__(self, k, chain=None):
+        self.k = k
+        self.chain = chain
+
+    def generate(self, ag, name: str):
+        from scipy.spatial import  KDTree
+
+        ca_position = ag.c_alphas_positions(self.chain)
+        kdtree = KDTree(ca_position)
+        residue_num = len(ca_position)
+        adjacency = np.zeros((residue_num, residue_num))
+        for i, pos in enumerate(ca_position):
+            _, neig = kdtree.query(pos, k= self.k + 1)
+            for j in neig:
+                adjacency[i,j] = 1
+
+        return Graph(name, adjacency, ca_position, ag.c_alphas_residues(self.chain))
+
 
 
 class GraphProGenerator:

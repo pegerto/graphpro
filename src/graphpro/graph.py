@@ -11,13 +11,13 @@ class Graph():
     """
 
     def __init__(self, name: str,
-                 distances: np.array,
+                 adjacency: np.array,
                  positions: np.array,
                  res_map: dict[int, dict],
                  metadata: ProteinMetadata = None):
 
         self.name = name
-        self.distances = distances
+        self.adjacency = adjacency
         self.positions = positions
         self._n_attr = {i: {"resid": res_attr['resid']}
                         for i, res_attr in enumerate(res_map)}
@@ -28,10 +28,10 @@ class Graph():
 
     def __eq__(self, other):
         """Compare two graphs for equality"""
-        # TODO: may need to compare more than the distances
+        # TODO: may need to compare more than the adjacency
         if not other:
             return False
-        return (self.distances == other.distances).any()
+        return (self.adjacency == other.adjacency).any()
 
     def node_attr(self, node_id: int):
         return self._n_attr.get(node_id)
@@ -59,7 +59,7 @@ class Graph():
 
     def to_networkx(self) -> nx.Graph:
         """ Returns a networkx G undirected graph with populated attributes """
-        G = nx.from_numpy_array(self.distances)
+        G = nx.from_numpy_array(self.adjacency)
         nx.set_node_attributes(G, self._n_attr)
         return G
 
