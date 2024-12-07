@@ -11,6 +11,7 @@ from graphpro.util.sasa import compute_sasa
 from graphpro.util.modes import compute_gnm_slow_modes, compute_anm_slow_modes
 from graphpro.util.dssp import compute_dssp, DSSP_CLASS
 from graphpro.util.polarity import POLARITY_CLASSES, residue_polarity
+from graphpro.util.conservation import ConservationScoreClient
 
 class NodeTargetBinaryAttribute(NodeTarget):
     """ Binary target, creates a binary one_hot encoding of the property
@@ -192,3 +193,23 @@ class DSSP(NodeAnnotation):
         secondary = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 'U' for n in G.nodes()]
         secondary_class = [DSSP_CLASS.index(p) for p in secondary]
         return F.one_hot(torch.tensor(secondary_class, dtype=torch.int64), num_classes=len(DSSP_CLASS)).to(torch.float)
+
+class ConservationScore(NodeAnnotation):
+    """Computes the conservation score for each residue in the graph by default shannon conservation is calculated 
+       using the server graphpro.pegerto.com
+    """
+    def __init__(self, attr_name: str = 'cons_shannon'):
+        """ Attribute name
+        """
+        self.attr_name  = attr_name
+
+    def generate(self, G: Graph, atom_group: AtomGroup):
+        scorer = ConservationScoreClient(str(G), G.metadata.chain)
+        
+        for resid, score in scorer.compute_conservation_score():
+            node_id = G.get_node_by_resid(resid)
+            G.node_attr_add(node_id,self.attr_name, score)
+
+    def encode(self, G: Graph) -> torch.tensor:
+        scores = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
+        return F.normalize(torch.tensor([scores], dtype=torch.float).T, dim=(0,1))
