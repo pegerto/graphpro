@@ -1,5 +1,5 @@
 import numpy as np
-from .graph import Graph
+from .graph import Graph, ProteinMetadata
 from .collection import GraphCollection
 
 
@@ -28,7 +28,8 @@ class ContactMap(RepresentationMethod):
         ca_position = ag.c_alphas_positions(self.chain)
         dist = distance.squareform(distance.pdist(ca_position))
         dist[dist > self.cutoff] = 0
-        return Graph(name, dist, ca_position, ag.c_alphas_residues(self.chain))
+        metadata = ProteinMetadata(uniprot_id=None, chain=self.chain)
+        return Graph(name, dist, ca_position, ag.c_alphas_residues(self.chain), metadata)
 
 class KNN(RepresentationMethod):
     """ Generate the structure form a defined number of neighbours
@@ -49,7 +50,8 @@ class KNN(RepresentationMethod):
             for j in neig:
                 adjacency[i,j] = 1
 
-        return Graph(name, adjacency, ca_position, ag.c_alphas_residues(self.chain))
+        metadata = ProteinMetadata(uniprot_id=None, chain=self.chain)
+        return Graph(name, adjacency, ca_position, ag.c_alphas_residues(self.chain), metadata)
 
 
 
