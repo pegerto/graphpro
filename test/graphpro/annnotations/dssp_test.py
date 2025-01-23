@@ -23,6 +23,10 @@ u4 = mda.Universe(
         os.path.realpath(__file__)) +
     '/../../testdata/1qp0.pdb')
 
+u5 = mda.Universe(
+    os.path.dirname(
+        os.path.realpath(__file__)) +
+    '/../../testdata/4a07.pdb')
 
 def test_dssp():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [DSSP()])
@@ -53,3 +57,9 @@ def test_dssp_encode_incompleted_residue_atoms():
     G = md_analisys(u4).generate(ContactMap(cutoff=6), [DSSP()])
     data = G.to_data(node_encoders=[DSSP()])
     assert data.x.size() == (338, 4)
+    
+    
+def test_dssp_encode_partial_atom_residue_atoms():
+    G = md_analisys(u5).generate(ContactMap(cutoff=6), [DSSP()])
+    data = G.to_data(node_encoders=[DSSP()])
+    assert data.x.size() == (282, 4)

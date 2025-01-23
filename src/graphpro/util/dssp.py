@@ -22,16 +22,17 @@ def compute_dssp(atom_group: AtomGroup):
         iatom = DSSP_ATOM_NUM.get(atom.name, None)
         if resid_old != atom.resid:
             visited = []
-            if len(atoms) > 0:
+            if len(atoms) >= 4:
                 resids.append(resid_old)
                 coords.append(np.array(atoms))
-                atoms = []
+            atoms = []
             resid_old = atom.resid
 
         if iatom is not None:
             if iatom not in visited:
                 visited.append(iatom)
                 atoms.append(atom.position)
+    
     if atoms and len(atoms) >= 4: # not adding partial residue atoms
         coords.append(np.array(atoms))
         resids.append(resid_old)
