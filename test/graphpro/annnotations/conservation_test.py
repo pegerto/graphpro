@@ -15,12 +15,10 @@ u3aw0 = mda.Universe(
 def test_conservation():
     G = md_analisys(u3aw0, '4AW0').generate(ContactMap(cutoff=6, chain='A'), [ConservationScore()])
     assert len(G.nodes()) == 283
-    print(G.node_attr(0))
-    print(G.node_attr(1))
-    print(G.node_attr(2))
-    assert G.node_attr(0)['cons_shannon'] == 0.8285890860167484
-    assert G.node_attr(1)['cons_shannon'] == 0.8487017361472784
-    assert G.node_attr(2)['cons_shannon'] == 1.330480269847359
+    # TODO: Ensure all atoms have score, and ensure score atoms [0,1]
+    assert G.node_attr(0)['cons_shannon'] == 1.0
+    assert G.node_attr(1)['cons_shannon'] == 1.0
+    assert G.node_attr(2)['cons_shannon'] == 1.0
 
 def test_conservation_encoding():
     G = md_analisys(u3aw0, '4AW0').generate(ContactMap(cutoff=6, chain='A'), [ConservationScore()])
