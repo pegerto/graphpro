@@ -225,4 +225,7 @@ class BT_Potential(NodeAnnotation):
         self.chain = chain
     
     def generate(self, G, atom_group):
-        potentials = compute_bt_potential(atom_group, self.chain)
+        res_ids, eigen_potential = compute_bt_potential(atom_group, self.chain)
+        for i,resid in enumerate(res_ids):
+            node_id = G.get_node_by_resid(resid)
+            G.node_attr_add(node_id, self.attr_name, eigen_potential[i])

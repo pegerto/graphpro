@@ -1,3 +1,5 @@
+import numpy as np
+
 _residue_order = ['CYS','PHE','LEU','TRP','VAL','ILE','MET','HIS','TYR','ALA',
             'GLY','PRO','ASN','THR','SER','ARG','GLN','ASP','LYS','GLU']
 
@@ -25,21 +27,42 @@ _bt_data = [
 ]
 
 BT_potential = {}
+
 for i, res1 in enumerate(_residue_order):
     for j, res2 in enumerate(_residue_order):
         BT_potential[(res1, res2)] = _bt_data[i][j]
+
+def bt_potential(res1, res2):
+    def normalize_res_name(res_name):
+        if res_name in ('HSD', 'HSE', 'HSP'):
+            return 'HIS'
+        return res_name
+    return BT_potential[(normalize_res_name(res1), normalize_res_name(res2))]
     
-        
-def compute_bt_potential(atom_group, chain):
+    
+def compute_bt_potential(atom_group, chain, cutoff=6, epsilon=1):
+    from scipy.spatial import distance
+    from numpy import linalg as LA
+    
     ca_position = atom_group.c_alphas_positions(chain)
-    print(ca_position) 
-    print(atom_group)
-    # resids = []
-    # for residue in atom_group.residues:
-    #     resids.append(residue.resid)
-    # resids = np.array(resids)
-    # bt_potential = np.zeros((len(resids), len(resids)))
-    # for i, res1 in enumerate(resids):
-    #     for j, res2 in enumerate(resids):
-    #         bt_potential[i,j] = BT_potential[(res1, res2)]
-    # return resids, bt_potential
+    residues = atom_group.c_alphas_residues(chain)
+    dist = distance.squareform(distance.pdist(ca_position))
+    potential = np.zeros((len(dist), len(dist)))
+    res_ids = [res['resid'] for res in residues]
+    
+    for i in range(len(dist)):
+        for j in range(i + 1, len(dist)):
+            resname_i = residues[i]['resname']
+            resname_j = residues[j]['resname']
+            
+            V_ij = bt_potential(resname_i, resname_j)
+            r_ij = dist[i,j]
+            
+            if r_ij < cutoff:
+                # Lennard-Jones weight on distance
+                energy = epsilon * V_ij * ((cutoff / r_ij) ** 6 - (cutoff / r_ij) ** 12)
+                potential[i,j] = energy
+                potential[j,i] = energy
+    
+    eigen_value, _ = LA.eig(potential)
+    return res_ids, eigen_value
