@@ -215,7 +215,7 @@ class ConservationScore(NodeAnnotation):
         scores = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
         return F.normalize(torch.tensor([scores], dtype=torch.float).T, dim=(0,1))
     
-class BT_Potential(NodeAnnotation):
+class BTPotential(NodeAnnotation):
     """Computes residue energy contribution based on BT potential
     """
     def __init__(self, attr_name: str = 'bt_potential', chain: str = None):
