@@ -12,6 +12,7 @@ from graphpro.util.modes import compute_gnm_slow_modes, compute_anm_slow_modes
 from graphpro.util.dssp import compute_dssp, DSSP_CLASS
 from graphpro.util.polarity import POLARITY_CLASSES, residue_polarity
 from graphpro.util.conservation import ConservationScoreClient
+from graphpro.util.energy import compute_bt_potential
 
 class NodeTargetBinaryAttribute(NodeTarget):
     """ Binary target, creates a binary one_hot encoding of the property
@@ -210,6 +211,25 @@ class ConservationScore(NodeAnnotation):
             node_id = G.get_node_by_resid(resid)
             G.node_attr_add(node_id,self.attr_name, score)
 
+    def encode(self, G: Graph) -> torch.tensor:
+        scores = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
+        return F.normalize(torch.tensor([scores], dtype=torch.float).T, dim=(0,1))
+    
+class BT_Potential(NodeAnnotation):
+    """Computes residue energy contribution based on BT potential
+    """
+    def __init__(self, attr_name: str = 'bt_potential', chain: str = None):
+        """ Attribute name
+        """
+        self.attr_name  = attr_name 
+        self.chain = chain
+    
+    def generate(self, G, atom_group):
+        res_ids, eigen_potential = compute_bt_potential(atom_group, self.chain)
+        for i,resid in enumerate(res_ids):
+            node_id = G.get_node_by_resid(resid)
+            G.node_attr_add(node_id, self.attr_name, eigen_potential[i])
+            
     def encode(self, G: Graph) -> torch.tensor:
         scores = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
         return F.normalize(torch.tensor([scores], dtype=torch.float).T, dim=(0,1))
