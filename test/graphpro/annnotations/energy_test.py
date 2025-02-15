@@ -1,3 +1,4 @@
+import torch
 import MDAnalysis as mda
 
 from graphpro import md_analisys
@@ -12,3 +13,10 @@ def test_bt_potential_calculation():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [BT_Potential()])
     assert len(G.nodes()) == 214
     assert G.node_attr(0)['bt_potential'] == -702.0824887338479
+
+def test_gnm_encoding():
+    G = md_analisys(u1).generate(ContactMap(cutoff=6), [BT_Potential()])
+    data = G.to_data(node_encoders=[BT_Potential()])
+
+    assert data.x.size() == (214, 1)
+    assert data.x.dtype == torch.float

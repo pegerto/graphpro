@@ -229,3 +229,7 @@ class BT_Potential(NodeAnnotation):
         for i,resid in enumerate(res_ids):
             node_id = G.get_node_by_resid(resid)
             G.node_attr_add(node_id, self.attr_name, eigen_potential[i])
+            
+    def encode(self, G: Graph) -> torch.tensor:
+        scores = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
+        return F.normalize(torch.tensor([scores], dtype=torch.float).T, dim=(0,1))
