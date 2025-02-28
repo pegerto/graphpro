@@ -65,9 +65,11 @@ class Graph():
 
     def to_data(self, node_encoders = [], target: Target = None) -> Data:
         """ Return a PyG object from this existing graph"""
-        directed = torch.tensor([[edge[0],edge[1]] for edge in self.to_networkx().edges], dtype=torch.long)
-        inversed = torch.tensor([[edge[1],edge[0]] for edge in self.to_networkx().edges], dtype=torch.long)
-        cco = torch.cat((directed, inversed), 0).t().contiguous()
+        row, col = np.nonzero(self.adjacency)
+        values = self.adjacency[row, col]
+        indices = torch.tensor(np.array([row,col], dtype=int), dtype=torch.long)
+        values = torch.tensor(values, dtype=torch.float)
+        cco = torch.sparse_coo_tensor(indices, values, self.adjacency.shape).coalesce()    
     
         x = None
         y = None
@@ -82,7 +84,7 @@ class Graph():
         if target:
             y = target.encode(self)
 
-        return Data(x=x, edge_index=cco, y=y)
+        return Data(x=x, edge_index=cco.indices(), y=y)
 
     def nodes(self) -> list[int]:
         """ Return node list """
