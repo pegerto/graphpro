@@ -47,9 +47,9 @@ def test_graph_plot():
     SIMPLE_G.plot(show=False)
 
 def test_to_data_index():
-    edge_index = torch.tensor([[0, 0, 1, 0, 1, 1],
-                  [0, 1, 1, 0, 0, 1]], dtype=torch.long)    
+    edge_index = torch.tensor([[0, 0, 1, 1],[0, 1, 0, 1]])    
     assert(torch.allclose(SIMPLE_G.to_data().edge_index,  edge_index))
+    assert(SIMPLE_G.to_data().is_directed() == False)
 
 def test_to_data_x_transformer():    
     assert SIMPLE_G_ATTR.to_data(node_encoders=[ResidueType()]).x.size() == (2,22)
