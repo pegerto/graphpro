@@ -66,3 +66,30 @@ def compute_bt_potential(atom_group, chain, cutoff=6, epsilon=1):
     
     eigen_value, _ = LA.eig(potential)
     return res_ids, eigen_value
+
+
+def compute_eigen_centrality(atom_group, chain, cutoff=6, epsilon=1):
+    from scipy.spatial import distance
+    import networkx as nx
+    
+    ca_position = atom_group.c_alphas_positions(chain)
+    residues = atom_group.c_alphas_residues(chain)
+    dist = distance.squareform(distance.pdist(ca_position))
+    potential = np.zeros((len(dist), len(dist)))
+    res_ids = [res['resid'] for res in residues]
+    
+    for i in range(len(dist)):
+        for j in range(i + 1, len(dist)):
+            resname_i = residues[i]['resname']
+            resname_j = residues[j]['resname']
+            
+            V_ij = bt_potential(resname_i, resname_j)
+            r_ij = dist[i,j]
+            
+            if r_ij < cutoff:
+                energy = np.exp(-V_ij)
+                potential[i,j] = energy
+                potential[j,i] = energy
+    G = nx.from_numpy_array(potential)
+    eigen_value = nx.eigenvector_centrality_numpy(G)
+    return res_ids, eigen_value
