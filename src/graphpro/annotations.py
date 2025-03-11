@@ -238,14 +238,15 @@ class BTEigenCentrality(NodeAnnotation):
     """ Computes the residue energy contribution based on BT potential to the graph 
         centrality.
     """
-    def __init__(self, attr_name: str = 'bt_eigen_centrality', chain: str = None):
+    def __init__(self, attr_name: str = 'bt_eigen_centrality', chain: str = None, cutoff: int = 6):
         """ Attribute name
         """
         self.attr_name  = attr_name 
         self.chain = chain
+        self.cutoff = cutoff
     
     def generate(self, G, atom_group):
-        res_ids, eigen_potential = compute_eigen_centrality(atom_group, self.chain)
+        res_ids, eigen_potential = compute_eigen_centrality(atom_group, self.chain, cutoff=self.cutoff)
         for i,resid in enumerate(res_ids):
             node_id = G.get_node_by_resid(resid)
             G.node_attr_add(node_id, self.attr_name, eigen_potential[i])
