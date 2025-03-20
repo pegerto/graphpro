@@ -24,4 +24,4 @@ def test_gnm_encoding():
 def test_bt_potential_calculation():
     G = md_analisys(u1).generate(ContactMap(cutoff=6), [BTEigenCentrality()])
     assert len(G.nodes()) == 214
-    assert round(G.node_attr(90)['bt_eigen_centrality'],5) == 0.00022
+    assert round(G.node_attr(90)['bt_eigen_centrality'],10) == 1.24773e-05

@@ -68,7 +68,7 @@ def compute_bt_potential(atom_group, chain, cutoff=6, epsilon=1):
     return res_ids, eigen_value
 
 
-def compute_eigen_centrality(atom_group, chain, cutoff=6, epsilon=1):
+def compute_eigen_centrality(atom_group, chain, cutoff=6, max_iter=500):
     from scipy.spatial import distance
     import networkx as nx
     
@@ -91,5 +91,5 @@ def compute_eigen_centrality(atom_group, chain, cutoff=6, epsilon=1):
                 potential[i,j] = energy
                 potential[j,i] = energy
     G = nx.from_numpy_array(potential)
-    eigen_value = nx.eigenvector_centrality_numpy(G)
+    eigen_value = nx.eigenvector_centrality(G,  max_iter=max_iter, weight='weight')
     return res_ids, eigen_value
