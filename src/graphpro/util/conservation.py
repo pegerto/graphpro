@@ -6,9 +6,11 @@ class ConservationScoreClient:
 
     def compute_conservation_score(self) -> list[tuple[int,float]]:
         import requests
-        
+        body = {
+            "method": "shannon"
+        }
         resouce = f'https://{self.server}/conservation/{self.pdb_id}/{self.chain_id}'
-        resp = requests.post(resouce, verify=False)
+        resp = requests.post(resouce, json=body, verify=False)
         if resp.status_code != 200:
             raise Exception(f"Error calculating conservation: {resp.status_code}")
         

@@ -37,6 +37,11 @@ class NodeAnnotation():
             and dtype float (to be able to cat to other node properties.)
         """
         pass
+            
+    def _min_max_normalization(self, x: torch.tensor,  eps=1e-12) -> torch.tensor:
+        """ Allow for min_max normalization of node attributes"""
+        x_min, x_max = torch.aminmax(x)
+        return (x - x_min) / (x_max - x_min + eps)
 
 
 class ResidueType(NodeAnnotation):
@@ -51,7 +56,7 @@ class ResidueType(NodeAnnotation):
         """
         self.attr_name = attr_name
         self.res_letters = res_letters()
-
+        
     def generate(self, G: Graph, atom_group: AtomGroup):
         for res in atom_group.c_alphas_residues():
             node_id = G.get_node_by_resid(res['resid'])
@@ -232,7 +237,7 @@ class BTPotential(NodeAnnotation):
             
     def encode(self, G: Graph) -> torch.tensor:
         scores = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
-        return F.normalize(torch.tensor([scores], dtype=torch.float).T, dim=(0,1))
+        return self._min_max_normalization(torch.tensor([scores], dtype=torch.float).T)
     
 class BTEigenCentrality(NodeAnnotation):
     """ Computes the residue energy contribution based on BT potential to the graph 
@@ -254,5 +259,5 @@ class BTEigenCentrality(NodeAnnotation):
 
     def encode(self, G: Graph) -> torch.tensor:
         scores = [G.node_attr(n)[self.attr_name] if self.attr_name in G.node_attr(n) else 0 for n in G.nodes()]
-        return F.normalize(torch.tensor([scores], dtype=torch.float).T, dim=(0,1))
+        return self._min_max_normalization(torch.tensor([scores], dtype=torch.float).T)
     
